@@ -1,0 +1,64 @@
+html, body {
+  margin: 0;
+  padding: 0; }
+
+html {
+  font-size: 62.5%; }
+
+body {
+  font-size: 1.6rem;
+  font-family: sans-serif; }
+
+.page-header {
+  position: fixed;
+  height: 60px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #607D8B; }
+  .page-header .logo {
+    height: 60px;
+    line-height: 60px; }
+    .page-header .logo p {
+      font-size: 2.4rem;
+      color: #FFFFFF;
+      margin: 0;
+      padding: 0 0 0 20px; }
+
+main .messages {
+  padding: 80px 10px 80px 10px;
+  overflow: scroll; }
+  main .messages .message {
+    background: #607D8B;
+    border-radius: 5px;
+    padding: 10px;
+    word-wrap: break-word;
+    color: #FFFFFF;
+    margin: 5px 0 5px 0;
+    display: inline-block;
+    float: right;
+    clear: both; }
+main .input {
+  position: fixed;
+  height: 60px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #607D8B;
+  display: flex;
+  flex-wrap: nowrap; }
+  main .input .message-input {
+    height: 40px;
+    margin: 10px;
+    padding-left: 10px;
+    font-size: 1.6rem;
+    width: 80%;
+    box-sizing: border-box;
+    border-radius: 20px; }
+  main .input .send-message-btn {
+    height: 30px;
+    margin: 15px 0 15px 0;
+    background: transparent;
+    border: 0; }
+
+/*# sourceMappingURL=style.css.map */
