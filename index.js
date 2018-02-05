@@ -10,15 +10,22 @@ app.get('/', function(req, res){
 app.use(express.static(__dirname + '/src'));
 
 io.on('connection', function(socket){
-    console.log('a user connected');
-    info = "User connected";
-    io.emit('user connected', info);
-    socket.on('disconnect', function(){
-        console.log('user disconnected');
+    socket.on('user joined', function(nickname) {
+        console.log(nickname + " joined chat");
+        io.emit('user joined', nickname);
+        socket.on('disconnect', function(){
+            console.log(nickname +  ' disconnected');
+            io.emit('disconnect', nickname);
+        });
     });
-    socket.on('chat message', function(msg, date) {
-        console.log(msg + date);
-        io.emit('chat message', msg, date);
+    socket.on('user typing', function(nickname, state) {
+
+       io.emit('user typing', nickname, state);
+       state = 0;
+    });
+    socket.on('chat message', function(msg, date, nickname) {
+        console.log(date + " " + nickname + " - " + msg);
+        io.emit('chat message', msg, date, nickname);
     })
 });
 
