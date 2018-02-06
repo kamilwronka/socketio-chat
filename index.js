@@ -18,10 +18,9 @@ io.on('connection', function(socket){
             io.emit('disconnect', nickname);
         });
     });
-    socket.on('user typing', function(nickname, state) {
+    socket.on('user is typing', function(nickname, typing) {
 
-       io.emit('user typing', nickname, state);
-       state = 0;
+       io.emit('user typing', nickname, typing);
     });
     socket.on('chat message', function(msg, date, nickname) {
         console.log(date + " " + nickname + " - " + msg);

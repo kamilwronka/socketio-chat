@@ -1,31 +1,50 @@
 (function() {
     'use strict';
     var socket = io();
-    var chatSubmit, chatAppend, sendMsgBtn, message, messages, appendInfo, appendTyping, addUserWindow, logInBtn;
+    var chatSubmit, chatAppend, sendMsgBtn, message, messages, appendInfo, appendTyping, logInBtn, logInFunc, disappearAnim, updateTyping, ifEmpty;
     var nickname;
     message = document.querySelector('.message-input');
     messages = document.querySelector('.messages');
+    var logInInput = document.querySelector('.log-in-input');
+    sendMsgBtn = document.querySelector('.send-message-btn');
+    var modal = document.querySelector('.modal');
 
 
+    var logged = false;
+    var typing = false;
 
-    addUserWindow = function() {
-       var modal = document.createElement('div');
-       var p = document.createElement('p');
-       var input = document.createElement('input');
-       var btn = document.createElement('button');
-       btn.classList.add('log-in');
-       input.classList.add('log-in-input');
 
-       p.innerHTML = "Podaj swój nick:";
-
-       modal.classList.add('modal');
-       modal.appendChild(p);
-       modal.appendChild(input);
-       modal.appendChild(btn);
-       document.body.appendChild(modal);
+    disappearAnim = function(elem) {
+        var opacity = 1;
+        console.log(elem);
+        var frame = function() {
+            opacity = opacity - 0.01;
+            elem.style.opacity = opacity;
+            if(opacity <= 0) {
+                clearInterval(id);
+                elem.remove();
+            }
+        };
+        var id = setInterval(frame, 5);
     };
 
-    addUserWindow();
+    updateTyping = function() {
+        var inputValue = document.querySelector('.message-input').value;
+        if(inputValue > 0) {
+            typing = true;
+        } else {
+            typing = false;
+        }
+        socket.emit('user is typing', nickname, typing);
+    };
+
+    ifEmpty = function(elem) {
+        if(elem.value === "") {
+            return false;
+        } else {
+            return true;
+        }
+    };
 
     chatSubmit = function() {
         var getDate = new Date(),
@@ -52,6 +71,8 @@
         messages.appendChild(messageInfo);
         messages.appendChild(elem);
         message.value = "";
+        typing = false;
+        updateTyping();
     };
     appendTyping = function(nickname) {
         var elem = document.createElement('div');
@@ -82,41 +103,89 @@
     socket.on('user joined', function(nickname) {
         appendInfo(nickname + " joined chat");
     });
-    socket.on('user typing', function(nickname, state) {
-        if(state === 1) {
+    socket.on('user is typing', function(nickname) {
+        if(typing) {
             appendTyping(nickname);
-            state = 0;
-        } else if(state === 0) {
-
         }
     });
     socket.on('disconnect', function(nickname) {
         appendInfo(nickname + " disconnected");
     });
 
-    logInBtn = document.querySelector('log-in');
-    logInBtn.addEventListener('click', function() {
-        var logInInput = document.querySelector('log-in-input');
+    logInFunc = function() {
+        disappearAnim(modal);
         nickname = logInInput.value;
+        logged = true;
         socket.emit('user joined', nickname);
+    };
+
+    //btn events
+
+    logInBtn = document.querySelector('.log-in');
+    console.log(logInBtn);
+    logInBtn.addEventListener('click', function() {
+        if(ifEmpty(logInInput)) {
+            logInFunc();
+        } else {
+            alert("empty nickname");
+        }
     });
 
-    sendMsgBtn = document.querySelector('.send-message-btn');
-    sendMsgBtn.addEventListener('click', chatSubmit);
 
+    sendMsgBtn.addEventListener('click', function() {
+        if(ifEmpty(message)) {
+            chatSubmit();
+        } else {
+            alert("empty message");
+        }
+    });
 
+//keyboard events
 
     document.body.addEventListener('keydown', function(ev) {
         console.log(ev.keyCode);
-        if(message !== document.activeElement && ev.keyCode === 13) {
-            message.focus();
-        } else if(message === document.activeElement && ev.keyCode === 13) {
-            chatSubmit();
+        if(logged) {
+            if(message !== document.activeElement && ev.keyCode === 13) {
+                message.focus();
+            } else if(message === document.activeElement && ev.keyCode === 13) {
+                if(ifEmpty(message)) {
+                    chatSubmit();
+                } else {
+                    alert("empty message");
+                }
+            }
+        } else {
+            if(logInInput !== document.activeElement && ev.keyCode === 13) {
+                logInInput.focus();
+            } else if(logInInput === document.activeElement && ev.keyCode === 13 ) {
+                if(ifEmpty(logInInput)) {
+                    logInFunc();
+                }
+            }
         }
-       if(message.value.length > 0 && message.value.length < 2) {
-           var state = 1;
-           socket.emit('user typing', nickname, state);
-            console.log(message.value);
-        }
+        updateTyping();
     })
+
+
+
+    //trianglify
+
+
+
+    var pattern, bg;
+
+    pattern = Trianglify({
+        width: window.innerWidth,
+        height: window.innerHeight,
+        cell_size: 100,
+        x_colors: [ '#CCCCCC', '#8B2635', '#373E40', '#FFFFFF']
+    });
+    bg = pattern.canvas();
+    console.log(bg);
+    var img = bg.toDataURL("image/png");
+    modal.style.backgroundImage = "url(" + img + ")";
+    modal.style.backgroundSize = "cover";
+    modal.style.backgroundImage = "no-repeat";
+    modal.style.backgroundAttachment = "fixed";
+
 })();
