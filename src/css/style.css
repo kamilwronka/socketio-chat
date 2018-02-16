@@ -11,7 +11,7 @@ body {
 
 .page-header {
   position: fixed;
-  height: 60px;
+  height: 50px;
   top: 0;
   left: 0;
   width: 100%;
@@ -20,16 +20,111 @@ body {
   -moz-box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.75);
   box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.75); }
   .page-header .logo {
-    height: 60px;
-    line-height: 60px; }
+    height: 50px;
+    line-height: 50px; }
     .page-header .logo p {
       font-size: 2.4rem;
       color: #FFFFFF;
       margin: 0;
       padding: 0 0 0 20px; }
+  .page-header .page-menu {
+    display: none;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 100vw;
+    background: #373E40;
+    animation: settings 0.1s linear;
+    margin: 0 auto 0 auto;
+    z-index: 500; }
+    .page-header .page-menu p {
+      height: 50px;
+      line-height: 50px;
+      font-size: 2.4rem;
+      color: #FFFFFF;
+      margin: 0;
+      padding: 0 0 0 20px; }
+    .page-header .page-menu .page-menu-ul {
+      list-style-type: none;
+      padding: 60px 0 0 0;
+      color: #FFFFFF;
+      width: 80%;
+      margin: 0 auto 0 auto;
+      text-align: center; }
+      .page-header .page-menu .page-menu-ul li {
+        border-bottom: 1px solid #CCCCCC;
+        margin: 0;
+        padding: 10px;
+        height: 40px;
+        line-height: 40px; }
+        .page-header .page-menu .page-menu-ul li svg {
+          margin-right: 5px; }
+        .page-header .page-menu .page-menu-ul li .active-users-amnt {
+          display: inline;
+          font-size: 1.6rem; }
+    .page-header .page-menu .active-users-list {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      background: #373E40;
+      display: none;
+      animation: settings 0.1s linear;
+      z-index: 502; }
+      .page-header .page-menu .active-users-list input {
+        height: 40px;
+        width: 70%;
+        box-sizing: border-box;
+        margin: 0 auto 0 auto;
+        display: block; }
+      .page-header .page-menu .active-users-list .settings-hamburger {
+        position: absolute;
+        top: 12px;
+        right: 20px;
+        border: 0;
+        background: transparent;
+        z-index: 503; }
+        .page-header .page-menu .active-users-list .settings-hamburger path {
+          fill: #FFFFFF; }
+      .page-header .page-menu .active-users-list .users-list ul li {
+        height: 40px;
+        padding: 10px;
+        margin: 0; }
+  .page-header .hamburger {
+    position: absolute;
+    height: 30px;
+    top: 10px;
+    right: 20px;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    z-index: 501;
+    animation: settings 0.1s linear; }
+    .page-header .hamburger .hamburger-icon path {
+      fill: #FFFFFF; }
+    .page-header .hamburger .close-icon {
+      display: none; }
+      .page-header .hamburger .close-icon path {
+        fill: #FFFFFF; }
+
+.page-header.nav-opened .page-menu {
+  display: block; }
+.page-header.nav-opened .hamburger .hamburger-icon {
+  display: none; }
+.page-header.nav-opened .hamburger .close-icon {
+  display: block; }
+
+.page-header.settings-opened .active-users-list {
+  display: block; }
+.page-header.settings-opened .hamburger {
+  display: none; }
 
 main .messages {
-  padding: 80px 10px 80px 10px;
+  padding: 70px 10px 70px 10px;
   overflow: scroll;
   min-height: 100%; }
   main .messages .message {
@@ -75,29 +170,32 @@ main .wave {
       animation-delay: -0.9s; }
 main .input {
   position: fixed;
-  height: 60px;
+  height: 50px;
   bottom: 0;
   left: 0;
   width: 100%;
   background: #8B2635;
   display: flex;
-  flex-wrap: nowrap; }
+  flex-wrap: nowrap;
+  justify-content: center;
+  z-index: -1; }
   main .input .message-input {
     height: 40px;
-    margin: 10px;
+    margin: 5px;
     padding-left: 10px;
     font-size: 1.6rem;
-    width: 80%;
+    width: calc(100% - 50px);
     box-sizing: border-box;
     outline: none;
     border: 2px solid transparent; }
-    main .input .message-input:active {
-      border: 2px solid #8B2635; }
   main .input .send-message-btn {
     height: 30px;
-    margin: 15px 0 15px 0;
+    width: 30px;
+    padding: 12px 0 0 0;
     background: transparent;
     border: 0; }
+    main .input .send-message-btn .send-icon path {
+      fill: #FFFFFF; }
 
 .modal {
   width: 100%;
@@ -142,12 +240,15 @@ main .input {
   30% {
     transform: translateY(-5px);
     opacity: 0.7; } }
-@keyframes modal {
+@keyframes settings {
   from {
-    opacity: 1;
-    display: initial; }
+    opacity: 0; }
   to {
-    opacity: 0;
-    display: none; } }
+    opacity: 1; } }
+@keyframes settings2 {
+  from {
+    opacity: 1; }
+  to {
+    opacity: 0; } }
 
 /*# sourceMappingURL=style.css.map */

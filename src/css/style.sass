@@ -8,7 +8,7 @@ body
   font-family: sans-serif
 .page-header
   position: fixed
-  height: 60px
+  height: 50px
   top: 0
   left: 0
   width: 100%
@@ -17,17 +17,117 @@ body
   -moz-box-shadow: 0 3px 7px 0 rgba(0,0,0,0.75)
   box-shadow: 0 3px 7px 0 rgba(0,0,0,0.75)
   .logo
-    height: 60px
-    line-height: 60px
+    height: 50px
+    line-height: 50px
     p
       font-size: 2.4rem
       color: #FFFFFF
       margin: 0
       padding: 0 0 0 20px
+  .page-menu
+    display: none
+    box-sizing: border-box
+    position: absolute
+    top: 0
+    right: 0
+    height: 100vh
+    width: 100vw
+    background: #373E40
+    animation: settings 0.1s linear
+    margin: 0 auto 0 auto
+    z-index: 500
+    p
+      height: 50px
+      line-height: 50px
+      font-size: 2.4rem
+      color: #FFFFFF
+      margin: 0
+      padding: 0 0 0 20px
+    .page-menu-ul
+      list-style-type: none
+      padding: 60px 0 0 0
+      color: #FFFFFF
+      width: 80%
+      margin: 0 auto 0 auto
+      text-align: center
+      li
+        border-bottom: 1px solid #CCCCCC
+        margin: 0
+        padding: 10px
+        height: 40px
+        line-height: 40px
+        svg
+          margin-right: 5px
+        .active-users-amnt
+          display: inline
+          font-size: 1.6rem
+    .active-users-list
+      position: absolute
+      width: 100vw
+      height: 100vh
+      top: 0
+      left: 0
+      background: #373E40
+      display: none
+      animation: settings 0.1s linear
+      z-index: 502
+      input
+        height: 40px
+        width: 70%
+        box-sizing: border-box
+        margin: 0 auto 0 auto
+        display: block
+      .settings-hamburger
+        position: absolute
+        top: 12px
+        right: 20px
+        border: 0
+        background: transparent
+        z-index: 503
+        path
+          fill: #FFFFFF
+      .users-list
+        ul
+          li
+            height: 40px
+            padding: 10px
+            margin: 0
 
+  .hamburger
+    position: absolute
+    height: 30px
+    top: 10px
+    right: 20px
+    border: 0
+    background: transparent
+    padding: 0
+    margin: 0
+    z-index: 501
+    animation: settings 0.1s linear
+    .hamburger-icon
+      path
+        fill: #FFFFFF
+    .close-icon
+      display: none
+      path
+        fill: #FFFFFF
+
+.page-header.nav-opened
+  .page-menu
+    display: block
+  .hamburger
+    .hamburger-icon
+      display: none
+    .close-icon
+      display: block
+.page-header.settings-opened
+  .active-users-list
+    display: block
+  .hamburger
+    display: none
 main
   .messages
-    padding: 80px 10px 80px 10px
+    padding: 70px 10px 70px 10px
     overflow: scroll
     min-height: 100%
     .message
@@ -74,30 +174,34 @@ main
 
   .input
     position: fixed
-    height: 60px
+    height: 50px
     bottom: 0
     left: 0
     width: 100%
     background: #8B2635
     display: flex
     flex-wrap: nowrap
+    justify-content: center
+    z-index: -1
     .message-input
       height: 40px
-      margin: 10px
+      margin: 5px
       padding-left: 10px
       font-size: 1.6rem
-      width: 80%
+      width: calc(100% - 50px)
       box-sizing: border-box
       outline: none
       border: 2px solid transparent
-      &:active
-        border: 2px solid #8B2635
 
     .send-message-btn
       height: 30px
-      margin: 15px 0 15px 0
+      width: 30px
+      padding: 12px 0 0 0
       background: transparent
       border: 0
+      .send-icon
+        path
+          fill: #FFFFFF
 
 .modal
   width: 100%
@@ -145,10 +249,14 @@ main
     transform: translateY(-5px)
     opacity: 0.7
 
-@keyframes modal
+@keyframes settings
+  from
+    opacity: 0
+  to
+    opacity: 1
+
+@keyframes settings2
   from
     opacity: 1
-    display: initial
   to
     opacity: 0
-    display: none

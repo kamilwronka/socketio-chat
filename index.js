@@ -4,6 +4,8 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var path = require('path');
 
+var users = [];
+
 app.get('/', function(req, res){
     res.sendFile(__dirname + '/index.html');
 });
@@ -13,8 +15,16 @@ io.on('connection', function(socket){
     socket.on('user joined', function(nickname) {
         console.log(nickname + " joined chat");
         io.emit('user joined', nickname);
+        users.push(nickname);
+        io.emit('active users', users.length, users);
+        console.log(users + "," + users.length);
         socket.on('disconnect', function(){
             console.log(nickname +  ' disconnected');
+            var index = users.indexOf(nickname);
+            if(index > -1) {
+                users.splice(index, 1);
+            }
+            io.emit('active users update', users.length, users, nickname);
             io.emit('disconnect', nickname);
         });
     });

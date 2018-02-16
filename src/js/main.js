@@ -13,6 +13,31 @@
     var logged = false;
     var typing = false;
 
+    //menu
+
+    var menuToggle, showActiveUsers, activeUsersBtn, pageHeader, hideActiveUsers, settCloseBtn, menuToggleBtn;
+
+    pageHeader = document.querySelector('.page-header');
+    settCloseBtn = document.querySelector('.settings-hamburger');
+    activeUsersBtn = document.querySelector('#active-users');
+    menuToggleBtn = document.querySelector('.hamburger');
+
+    menuToggle = function() {
+        pageHeader.classList.toggle('nav-opened');
+    };
+    showActiveUsers = function() {
+        pageHeader.classList.add('settings-opened');
+    };
+    hideActiveUsers = function() {
+        pageHeader.classList.remove('settings-opened');
+    };
+
+    menuToggleBtn.addEventListener('click', menuToggle);
+    activeUsersBtn.addEventListener('click', showActiveUsers);
+    settCloseBtn.addEventListener('click', hideActiveUsers);
+
+
+    //animations
 
     disappearAnim = function(elem) {
         var opacity = 1;
@@ -27,6 +52,8 @@
         };
         var id = setInterval(frame, 5);
     };
+
+    //typing events
 
     updateTyping = function() {
         var inputValue = document.querySelector('.message-input').value;
@@ -97,11 +124,46 @@
         elem.innerHTML = info;
         messages.appendChild(elem);
     };
+
+    //socket functions
+
     socket.on('chat message', function(msg, date, nickname){
         chatAppend(msg, date, nickname);
     });
     socket.on('user joined', function(nickname) {
         appendInfo(nickname + " joined chat");
+    });
+    socket.on('active users', function(amount, users) {
+        var activeUsersAmnt = document.querySelector('.active-users-amnt'),
+            activeUsersList = document.querySelector('.users-list');
+        activeUsersAmnt.innerHTML = "(" + amount + ")";
+
+        for(var i = 0; i < users.length; i++) {
+            var user = document.createElement('li');
+            user.innerHTML = users[i];
+            activeUsersList.appendChild(user);
+        }
+
+        console.log(users);
+
+    });
+    socket.on('active users update', function(amount, users, nickname){
+        var activeUsersAmnt = document.querySelector('.active-users-amnt'),
+            activeUsersList = document.querySelector('.users-list'),
+            activeUsers = document.querySelectorAll('li');
+
+        activeUsersAmnt.innerHTML = "(" + amount + ")";
+
+            for(var i = 0; i < amount; i++) {
+                if(nickname === activeUsers[i].innerHTML) {
+                    activeUsers[i].remove();
+                    activeUsersList.removeChild(activeUsers[i]);
+                    console.log(this);
+                    console.log(activeUsers[i]);
+
+                }
+            }
+
     });
     socket.on('user is typing', function(nickname) {
         if(typing) {
@@ -139,7 +201,6 @@
             alert("empty message");
         }
     });
-
 //keyboard events
 
     document.body.addEventListener('keydown', function(ev) {
