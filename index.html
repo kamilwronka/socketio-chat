@@ -19,7 +19,7 @@
         <i class="fas fa-times fa-2x close-icon"></i>
     </button>
     <nav class="page-menu">
-        <p>Chat settings</p>
+        <p class="setting-name">Chat settings</p>
         <ul class="page-menu-ul">
             <li id="active-users"><i class="fas fa-users"></i>Active users: <p class="active-users-amnt"></p></li>
             <li>
@@ -32,7 +32,7 @@
         </ul>
 
         <div class="active-users-list">
-            <p>Users list</p>
+            <p class="setting-name">Users list</p>
             <button class="settings-hamburger">
                 <i class="fas fa-times fa-2x settings-close-icon"></i>
             </button>
@@ -60,6 +60,14 @@
         </button>
     </div>
 </main>
+<audio id="receiveSound">
+    <source src="sound/receive.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+<audio id="sendSound">
+    <source src="sound/send.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/0.4.0/trianglify.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

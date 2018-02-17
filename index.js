@@ -1,4 +1,4 @@
-var express = require('express')
+var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -17,14 +17,13 @@ io.on('connection', function(socket){
         io.emit('user joined', nickname);
         users.push(nickname);
         io.emit('active users', users.length, users);
-        console.log(users + "," + users.length);
         socket.on('disconnect', function(){
             console.log(nickname +  ' disconnected');
             var index = users.indexOf(nickname);
             if(index > -1) {
                 users.splice(index, 1);
             }
-            io.emit('active users update', users.length, users, nickname);
+            io.emit('active users update', users.length, users);
             io.emit('disconnect', nickname);
         });
     });
@@ -34,7 +33,8 @@ io.on('connection', function(socket){
     });
     socket.on('chat message', function(msg, date, nickname) {
         console.log(date + " " + nickname + " - " + msg);
-        io.emit('chat message', msg, date, nickname);
+        socket.broadcast.emit('chat message', msg, date, nickname);
+        socket.emit('chat message sender', msg, date, nickname);
     })
 });
 

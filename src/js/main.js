@@ -1,17 +1,22 @@
 (function() {
     'use strict';
     var socket = io();
-    var chatSubmit, chatAppend, sendMsgBtn, message, messages, appendInfo, appendTyping, logInBtn, logInFunc, disappearAnim, updateTyping, ifEmpty;
+    var chatSubmit, chatAppend, sendMsgBtn, message, messages, appendInfo, appendTyping, logInBtn, logInFunc, disappearAnim, updateTyping, ifEmpty, activeUsersList;
     var nickname;
     message = document.querySelector('.message-input');
     messages = document.querySelector('.messages');
     var logInInput = document.querySelector('.log-in-input');
     sendMsgBtn = document.querySelector('.send-message-btn');
     var modal = document.querySelector('.modal');
+    var recSound = document.querySelector('#receiveSound'), sendSound = document.querySelector('#sendSound');
+
+
+    activeUsersList = document.querySelector('.users-list');
 
 
     var logged = false;
     var typing = false;
+    var muted = false;
 
     //menu
 
@@ -36,6 +41,32 @@
     activeUsersBtn.addEventListener('click', showActiveUsers);
     settCloseBtn.addEventListener('click', hideActiveUsers);
 
+    //search-user
+    var searchFunc, searchInput;
+
+    searchInput = document.querySelector('#search-user');
+
+
+
+    searchFunc = function() {
+        var li, list, filter;
+
+        filter = searchInput.value.toUpperCase();
+
+        list = activeUsersList.querySelectorAll('li');
+        for(var i = 0; i < list.length; i++) {
+            li = list[i];
+            if(li) {
+                if(li.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    list[i].style.display = "";
+                } else {
+                    list[i].style.display = "none";
+                }
+            }
+        }
+    };
+
+    searchInput.addEventListener('keyup', searchFunc);
 
     //animations
 
@@ -85,18 +116,33 @@
         date = hours + ':' + minutes;
         socket.emit('chat message', message.value, date, nickname);
     };
-    chatAppend = function(msg, date, nickname) {
+    chatAppend = function(msg, date, nickname, sender) {
         var elem = document.createElement('div');
         var messageInfo = document.createElement('div');
-        elem.classList.add('message');
+        if(sender === 0) {
+            elem.classList.add('message');
+            messageInfo.classList.add('message-info');
+            if(!muted) {
+                recSound.play();
+            }
+        } else if(sender === 1) {
+            elem.classList.add('message-sender');
+            messageInfo.classList.add('message-info-sender');
+            if(!muted) {
+                sendSound.play();
+            }
+        }
         elem.innerHTML = msg;
-        messageInfo.classList.add('message-info');
         messageInfo.innerHTML = nickname + " - " + date;
         elem.addEventListener('click', function(){
             messageInfo.classList.toggle('message-info-opened');
         });
         messages.appendChild(messageInfo);
         messages.appendChild(elem);
+        messages.scrollIntoView({
+            behavior: "smooth",
+            block: "end"
+        });
         message.value = "";
         typing = false;
         updateTyping();
@@ -128,41 +174,66 @@
     //socket functions
 
     socket.on('chat message', function(msg, date, nickname){
-        chatAppend(msg, date, nickname);
+        var sender = 0;
+        chatAppend(msg, date, nickname, sender);
+    });
+    socket.on('chat message sender', function(msg, date, nickname) {
+        var sender = 1;
+        chatAppend(msg, date, nickname, sender);
     });
     socket.on('user joined', function(nickname) {
         appendInfo(nickname + " joined chat");
     });
     socket.on('active users', function(amount, users) {
-        var activeUsersAmnt = document.querySelector('.active-users-amnt'),
-            activeUsersList = document.querySelector('.users-list');
-        activeUsersAmnt.innerHTML = "(" + amount + ")";
+        var activeUsersAmnt = document.querySelector('.active-users-amnt');
 
-        for(var i = 0; i < users.length; i++) {
+            activeUsersAmnt.innerHTML = "(" + amount + ")";
+
+        while(activeUsersList.firstChild) {
+            activeUsersList.removeChild(activeUsersList.firstChild);
+        }
+
+        for(var i = 0; i < amount; i++) {
             var user = document.createElement('li');
-            user.innerHTML = users[i];
+            var username = document.createElement('p');
+            var avatar = document.createElement('div');
+
+            username.innerHTML = users[i];
+            avatar.classList.add('avatar');
+            username.classList.add('username');
+
+            user.appendChild(avatar);
+            user.appendChild(username);
+
             activeUsersList.appendChild(user);
         }
 
-        console.log(users);
 
     });
-    socket.on('active users update', function(amount, users, nickname){
-        var activeUsersAmnt = document.querySelector('.active-users-amnt'),
-            activeUsersList = document.querySelector('.users-list'),
-            activeUsers = document.querySelectorAll('li');
+    socket.on('active users update', function(amount, users){
+        var activeUsersAmnt = document.querySelector('.active-users-amnt');
 
         activeUsersAmnt.innerHTML = "(" + amount + ")";
 
-            for(var i = 0; i < amount; i++) {
-                if(nickname === activeUsers[i].innerHTML) {
-                    activeUsers[i].remove();
-                    activeUsersList.removeChild(activeUsers[i]);
-                    console.log(this);
-                    console.log(activeUsers[i]);
+        while(activeUsersList.firstChild) {
+            activeUsersList.removeChild(activeUsersList.firstChild);
+        }
 
-                }
-            }
+        for(var i = 0; i < amount; i++) {
+            var user = document.createElement('li');
+            var username = document.createElement('p');
+            var avatar = document.createElement('div');
+
+
+            username.innerHTML = users[i];
+            avatar.classList.add('avatar');
+            username.classList.add('username');
+
+            user.appendChild(avatar);
+            user.appendChild(username);
+
+            activeUsersList.appendChild(user);
+        }
 
     });
     socket.on('user is typing', function(nickname) {
@@ -225,7 +296,7 @@
             }
         }
         updateTyping();
-    })
+    });
 
 
 

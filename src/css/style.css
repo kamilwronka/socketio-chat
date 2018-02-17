@@ -39,7 +39,7 @@ body {
     animation: settings 0.1s linear;
     margin: 0 auto 0 auto;
     z-index: 500; }
-    .page-header .page-menu p {
+    .page-header .page-menu .setting-name {
       height: 50px;
       line-height: 50px;
       font-size: 2.4rem;
@@ -76,10 +76,13 @@ body {
       z-index: 502; }
       .page-header .page-menu .active-users-list input {
         height: 40px;
-        width: 70%;
+        width: 100%;
         box-sizing: border-box;
         margin: 0 auto 0 auto;
-        display: block; }
+        display: block;
+        border: 2px solid transparent; }
+        .page-header .page-menu .active-users-list input:hover {
+          border: 2px solid #8B2635; }
       .page-header .page-menu .active-users-list .settings-hamburger {
         position: absolute;
         top: 12px;
@@ -89,10 +92,27 @@ body {
         z-index: 503; }
         .page-header .page-menu .active-users-list .settings-hamburger path {
           fill: #FFFFFF; }
-      .page-header .page-menu .active-users-list .users-list ul li {
-        height: 40px;
-        padding: 10px;
-        margin: 0; }
+      .page-header .page-menu .active-users-list .users-list {
+        list-style-type: none;
+        margin: 0;
+        padding: 10px; }
+        .page-header .page-menu .active-users-list .users-list li {
+          display: flex;
+          flex-wrap: nowrap;
+          height: 40px;
+          padding: 10px;
+          margin: 0; }
+          .page-header .page-menu .active-users-list .users-list li .avatar {
+            height: 40px;
+            width: 40px;
+            background-image: url("https://conferencecloud-assets.s3.amazonaws.com/default_avatar.png");
+            background-size: cover;
+            border-radius: 50%; }
+          .page-header .page-menu .active-users-list .users-list li .username {
+            line-height: 40px;
+            margin: 0 0 0 10px;
+            padding: 0;
+            color: #FFFFFF; }
   .page-header .hamburger {
     position: absolute;
     height: 30px;
@@ -125,8 +145,10 @@ body {
 
 main .messages {
   padding: 70px 10px 70px 10px;
-  overflow: scroll;
-  min-height: 100%; }
+  overflow: auto;
+  min-height: 100%;
+  z-index: -5;
+  position: relative; }
   main .messages .message {
     background: #8B2635;
     border-radius: 5px;
@@ -135,17 +157,41 @@ main .messages {
     color: #FFFFFF;
     margin: 5px 0 5px 0;
     display: inline-block;
-    float: right;
-    clear: both; }
+    float: left;
+    clear: both;
+    animation: message 0.1s cubic-bezier(0.86, 0.02, 1, 0.19); }
   main .messages .message-info {
+    background: transparent;
+    clear: both;
+    display: inline-block;
+    float: left;
+    font-size: 1.2rem;
+    color: #CCCCCC;
+    margin-top: 5px;
+    animation: message 0.1s cubic-bezier(0.86, 0.02, 1, 0.19); }
+    main .messages .message-info:last-child {
+      display: inline-block; }
+  main .messages .message-sender {
+    background: #C4C4C4;
+    border-radius: 5px;
+    padding: 10px;
+    word-wrap: break-word;
+    color: #000000;
+    margin: 5px 0 5px 0;
+    display: inline-block;
+    float: right;
+    clear: both;
+    animation: message 0.1s cubic-bezier(0.86, 0.02, 1, 0.19); }
+  main .messages .message-info-sender {
     background: transparent;
     clear: both;
     display: inline-block;
     float: right;
     font-size: 1.2rem;
     color: #CCCCCC;
-    margin-top: 5px; }
-    main .messages .message-info:last-child {
+    margin-top: 5px;
+    animation: message 0.1s cubic-bezier(0.86, 0.02, 1, 0.19); }
+    main .messages .message-info-sender:last-child {
       display: inline-block; }
   main .messages .info {
     text-align: center;
@@ -233,6 +279,12 @@ main .input {
 .modal.modal-closed {
   animation: 0.5s linear modal; }
 
+#receiveSound {
+  display: none; }
+
+#sendSound {
+  display: none; }
+
 @keyframes wave {
   0%, 60%, 100% {
     transform: initial;
@@ -250,5 +302,10 @@ main .input {
     opacity: 1; }
   to {
     opacity: 0; } }
+@keyframes message {
+  from {
+    opacity: 0; }
+  to {
+    opacity: 1; } }
 
 /*# sourceMappingURL=style.css.map */
