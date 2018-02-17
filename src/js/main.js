@@ -1,6 +1,9 @@
 (function() {
     'use strict';
     var socket = io();
+
+    //main declarations
+
     var chatSubmit, chatAppend, sendMsgBtn, message, messages, appendInfo, appendTyping, logInBtn, logInFunc, disappearAnim, updateTyping, ifEmpty, activeUsersList;
     var nickname;
     message = document.querySelector('.message-input');
