@@ -15,7 +15,10 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  background: #607D8B; }
+  background: #607D8B;
+  -webkit-box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.75);
+  box-shadow: 0 3px 7px 0 rgba(0, 0, 0, 0.75); }
   .page-header .logo {
     height: 60px;
     line-height: 60px; }
@@ -27,7 +30,8 @@ body {
 
 main .messages {
   padding: 80px 10px 80px 10px;
-  overflow: scroll; }
+  overflow: scroll;
+  min-height: 100%; }
   main .messages .message {
     background: #607D8B;
     border-radius: 5px;
@@ -38,6 +42,26 @@ main .messages {
     display: inline-block;
     float: right;
     clear: both; }
+  main .messages .message-info {
+    background: transparent;
+    clear: both;
+    display: inline-block;
+    float: right;
+    font-size: 1.2rem;
+    color: #CCCCCC;
+    margin-top: 5px; }
+    main .messages .message-info:last-child {
+      display: inline-block; }
+  main .messages .info {
+    text-align: center;
+    font-size: 1.4rem;
+    color: #455A64;
+    display: block;
+    width: 100%;
+    height: 40px;
+    clear: both; }
+  main .messages .message-info.message-info-opened {
+    display: inline-block; }
 main .input {
   position: fixed;
   height: 60px;
