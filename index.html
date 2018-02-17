@@ -14,25 +14,56 @@
     <div class="logo">
         <p>Socket.io chat</p>
     </div>
-    <nav class="page-menu"></nav>
+    <button class="hamburger">
+        <i class="fas fa-bars fa-2x hamburger-icon"></i>
+        <i class="fas fa-times fa-2x close-icon"></i>
+    </button>
+    <nav class="page-menu">
+        <p>Chat settings</p>
+        <ul class="page-menu-ul">
+            <li id="active-users"><i class="fas fa-users"></i>Active users: <p class="active-users-amnt"></p></li>
+            <li>
+                Change nickname(doesnt work)
+            </li>
+            <li>
+                Change chat background(doesnt work)
+            </li>
+
+        </ul>
+
+        <div class="active-users-list">
+            <p>Users list</p>
+            <button class="settings-hamburger">
+                <i class="fas fa-times fa-2x settings-close-icon"></i>
+            </button>
+            <input placeholder="Search user..." id="search-user">
+            <ul class="users-list">
+
+            </ul>
+        </div>
+    </nav>
 </header>
 <main>
+    <div class="modal">
+        <h2>Welcome to Socket.io chat!</h2>
+        <div class="wrapper">
+            <p>Your nickname:</p>
+            <input title="log-in-input" placeholder="Your nickname..." class="log-in-input">
+            <button class="log-in">Log in</button>
+        </div>
+    </div>
     <div class="messages"></div>
     <div class="input">
-        <input class="message-input">
+        <input type="text" placeholder="Type your message here..." class="message-input">
         <button class="send-message-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" width="30px" height="30px" viewBox="0 0 535.5 535.5" style="enable-background:new 0 0 535.5 535.5;" xml:space="preserve">
-<g>
-	<g id="send">
-		<polygon points="0,497.25 535.5,267.75 0,38.25 0,216.75 382.5,267.75 0,318.75   " fill="#FFFFFF"/>
-	</g>
-</g>
-</svg>
+            <i class="fas fa-2x fa-arrow-circle-right send-icon"></i>
         </button>
     </div>
 </main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/0.4.0/trianglify.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
 <script src="js/main.js"></script>
 </body>
 </html>
